@@ -1,0 +1,10 @@
+heyyy {{ship.customer.name}}!!
+You've ordered:
+
+{% for item in ship.order.items %}
+{{item.quantity}} x {{item.product.name}}
+{% endfor %}
+You've paid a total of ${{ship.order.get_cart_total}} with transaction id : {{ship.order.transaction_id}}.
+The order will be delivered shortly at {{ship.strAddress}}.
+
+Thank You for ordering! Keep shopping with us!
