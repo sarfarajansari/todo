@@ -22,6 +22,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path("auth/",include("authApi.urls")),
     path("store/",include("store.urls")),
+    path("schedule/",include("schedule.urls")),
 ]
 
 urlpatterns+= static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)

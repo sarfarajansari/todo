@@ -189,9 +189,8 @@ def SubmitOrder(request):
         session["completed_orders"].append(
             session["orderId"])
         del session["orderId"]
-    print(session["completed_orders"])
     
-    return Response({"message":"order submitted","status":0})
+    return Response({"message":"order submitted","status":0,"session":session})
 
 @api_view(['POST'])
 def OrdersHistory(request):
@@ -234,8 +233,6 @@ def CompletedOrder(request,pk):
             return Response(Data)
         except:
             pass
-    
-    print(pk,orders[0].id,order)
     return Response({"status":1})
         
 @api_view(["POST"])

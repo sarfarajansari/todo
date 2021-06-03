@@ -3,12 +3,12 @@ from rest_framework.response import Response
 from .emailVerify import valid,SendMailWithHtml
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-# Create your views here.
 from rest_framework.authtoken.models import Token
 from django.contrib.auth import  authenticate
 from django.template.loader import render_to_string
 from .models import*
 from random import randint
+from store.models import Order
 
 
 @api_view(["POST"])
@@ -31,8 +31,29 @@ def register(request):
             user.last_name = data["Lname"]
             user.save()
             token = Token.objects.get(user=user).key
-            
-            return Response({"message":"Registered","status":0,"token":token})
+            if "session" in data:
+                session = data["session"]
+                if "completed_orders" in session:
+                    for i in session["completed_orders"]:
+                        try:
+                            order= Order.objects.get(pk=i)
+                            if not order.customer:
+                                order.customer = user
+                                order.save()
+                        except:
+                            print("could not add orders")
+                if "orderId" in data:
+                    try:
+                        order = Order.objects.get(pk = int(session["orderId"]))
+                        if not order.customer:
+                                order.customer = user
+                                order.save()
+                    except:
+                        pass
+
+                session={}
+                            
+            return Response({"message":"Registered","status":0,"token":token,"session":session})
         else:
             error=""
             for f in form.errors.values():
