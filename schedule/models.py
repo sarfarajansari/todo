@@ -1,6 +1,13 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 # Create your models here.
+class ClayStudent(models.Model):
+    rollNo = models.IntegerField()
+    student = models.ForeignKey(User,on_delete=models.CASCADE,related_name="student")
+
+    def __str__(self):
+        return self.rollNo
 
 class Lecture(models.Model):
     subject = models.CharField(max_length=30)

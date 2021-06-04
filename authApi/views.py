@@ -9,6 +9,7 @@ from django.template.loader import render_to_string
 from .models import*
 from random import randint
 from store.models import Order
+from schedule.models import ClayStudent
 
 
 @api_view(["POST"])
@@ -132,7 +133,11 @@ def otpapi(request):
 
 
 @api_view(["GET"])
-def test(request):
+def check(request):
     if request.user.is_authenticated:
-        return Response({"status":"0"})
+        try: 
+            student = ClayStudent.objects.get(student=request.user)
+            return Response({"status":"0"})
+        except:
+            pass
     return Response({"status":"1"})

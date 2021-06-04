@@ -1,6 +1,6 @@
 from time import sleep
 from threading import Timer
-from .models import LectureTime,Lecture
+from .models import LectureTime
 from datetime import datetime,timedelta
 import pytz
 
