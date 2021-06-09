@@ -1,0 +1,47 @@
+{% extends "layout.html" %}
+{% block blody %}
+{% load static %}
+
+<!-- Main -->
+	<div id="main" class="alt">
+
+		<!-- One -->
+			<section id="one">
+				<div class="inner">
+					<header class="major">
+						<h1>{{website.title}} </h1>
+					</header>
+					<p>{{website.description}}</p>
+					<a href="{{website.url}}" id="head-button" class="button next scrolly">Visit Site</a>
+				</div>
+			</section>
+
+			{% for page in website.get_pages %}
+			<section>
+				<div class="inner">
+					<header class="major">
+						<h2>{{page.name}}</h2>
+					</header>
+					<span class="image main"><img  src="{% static page.img.url %} " alt="" /></span>
+					<p>{{page.description}}</p>
+				</div>
+			</section>
+			{% endfor %}
+
+			<section id="two">
+				<div class="inner">
+					<header class="major">
+						<h2>Sarfaraj Ansari</h2>
+					</header>
+					<p>heyyy!<br> I am a python web developer and I can create websites with the above features . I use django for backend with sql database. I also use CSS3 and Bootstrap 5 for the designs!<br><br>Do you need such websites?<br>Go take a look at our services!</p>
+					<ul class="actions">
+						<li><a href="{% url 'services' %}" class="button next">Services</a></li>
+					</ul>
+				</div>
+			</section>
+
+	</div>
+	<script>
+		document.getElementById('banner').style.display="none";
+	</script>
+{% endblock %}

@@ -9,7 +9,7 @@ from django.template.loader import render_to_string
 from .models import*
 from random import randint
 from store.models import Order
-from schedule.models import ClayStudent
+from .models import ClayStudent
 
 
 @api_view(["POST"])

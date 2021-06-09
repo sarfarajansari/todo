@@ -1,0 +1,80 @@
+{% extends 'layout.html' %}
+{% block blody %}
+{% load static %}
+<!-- Main -->
+	<div id="main">
+
+		<!-- One -->
+			<section id="one" class="tiles">
+				<article>
+					<span class="image">
+						<img src="{% static 'images/tech2.jpeg' %}" alt="" />
+					</span>
+					<header class="major">
+						<h3><a href="{% url 'projects' %}" class="link">Resposive Websites</a></h3>
+						<p>I create fully resposive and smooth websites!</p>
+					</header>
+				</article>
+				<article>
+					<span class="image">
+						<img src="{% static 'images/tech5.jpg' %}" alt="" />
+					</span>
+					<header class="major">
+						<h3><a href="{% url 'projects' %}" class="link">Dynamic Content</a></h3>
+						<p>My websites contain dynamic content</p>
+					</header>
+				</article>
+				<article>
+					<span class="image">
+						<img src="{% static 'images/tech1.jpeg' %}" alt="" />
+					</span>
+					<header class="major">
+						<h3><a href="{% url 'projects' %}" class="link">Beautiful Designs</a></h3>
+						<p>I design my website with BOOTSTRAP and CSS3 </p>
+					</header>
+				</article>
+				<article>
+					<span class="image">
+						<img src="{% static 'images/tech3.jpg' %}" alt="" />
+					</span>
+					<header class="major">
+						<h3><a href="{% url 'projects' %}" class="link">Easy to Use</a></h3>
+						<p>My websites has very smooth and simple user interface </p>
+					</header>
+				</article>
+				<article>
+					<span class="image">
+						<img src="{% static 'images/tech7.webp' %}" alt="" />
+					</span>
+					<header class="major">
+						<h3><a href="{% url 'projects' %}" class="link">Performance and Speed</a></h3>
+						<p>my websites has really high speed and it loads really fast</p>
+					</header>
+				</article>
+				<article>
+					<span class="image">
+						<img src="{% static 'images/tech4.png' %}" alt="" />
+					</span>
+					<header class="major">
+						<h3><a href="{% url 'projects' %}" class="link">Security</a></h3>
+						<p>The Websites created  by me are highly secured , those are deployed after doing a lot of sucurity checks . Securing user data is our top most priority!</p>
+					</header>
+				</article>
+			</section>
+
+		<!-- Two -->
+			<section id="two">
+				<div class="inner">
+					<header class="major">
+						<h2>Sarfaraj Ansari</h2>
+					</header>
+					<p>heyyy!<br> I am a python web developer and I can create websites with the above features . I use django for backend with sql database. I also use CSS3 and Bootstrap 5 for the designs!<br><br>Do you need such websites?<br>Go take a look at our services!</p>
+					<ul class="actions">
+						<li><a href="{% url 'services' %} " class="button next">Services</a></li>
+					</ul>
+				</div>
+			</section>
+	</div>
+
+
+{% endblock %}

@@ -1,0 +1,86 @@
+{% extends 'layout.html' %}
+{% block blody %}
+{% load static %}
+
+<!-- Main -->
+	<div id="main">
+
+		<!-- One -->
+			<section id="one" class="spotlights">
+				<section>
+					<a href="{% url 'proj' firstsite.id %}" class="image">
+						<img src="{% static firstsite.get_homepage.img.url %}" alt="" data-position="center center" />
+					</a>
+					<div class="content">
+						<div class="inner">
+							<header class="major">
+								<h3>{{firstsite.title}} </h3>
+							</header>
+							<p>{{firstsite.description}}</p>
+							<ul class="actions">
+								<li><a href="{% url 'proj' firstsite.id %} " class="button">view project</a></li>
+							</ul>
+						</div>
+					</div>
+				</section>
+				{% for web in websites %}
+				<section>
+					<a href="{% url 'proj' web.id %}" class="image">
+						<img src="{% static web.get_homepage.img.url %}" alt="" data-position="top center" />
+					</a>
+					<div class="content">
+						<div class="inner">
+							<header class="major">
+								<h3>{{web.title}} </h3>
+							</header>
+							<p>{{web.description}}</p>
+							<ul class="actions">
+								<li><a href="{% url 'proj' web.id %}" class="button">View project</a></li>
+							</ul>
+						</div>
+					</div>
+				</section>
+				{% endfor %}
+
+				<!-- <section>
+					<a href="generic.html" class="image">
+						<img src="{% static 'images/pic10.jpg' %}" alt="" data-position="25% 25%" />
+					</a>
+					<div class="content">
+						<div class="inner">
+							<header class="major">
+								<h3>Sed nunc ligula</h3>
+							</header>
+							<p>Nullam et orci eu lorem consequat tincidunt vivamus et sagittis magna sed nunc rhoncus condimentum sem. In efficitur ligula tate urna. Maecenas massa sed magna lacinia magna pellentesque lorem ipsum dolor. Nullam et orci eu lorem consequat tincidunt. Vivamus et sagittis tempus.</p>
+							<ul class="actions">
+								<li><a href="generic.html" class="button">Learn more</a></li>
+							</ul>
+						</div>
+					</div>
+				</section> -->
+			</section>
+
+		<!-- Two -->
+
+			<section id="two">
+				<div class="inner">
+					<header class="major">
+						<h2>Sarfaraj Ansari</h2>
+					</header>
+					<p>heyyy!<br> I am a python web developer and I can create websites with the above features . I use django for backend with sql database. I also use CSS3 and Bootstrap 5 for the designs!<br><br>Do you need such websites?<br>Go take a look at our services!</p>
+					<ul class="actions">
+						<li><a href="{% url 'services' %}" class="button next">Services</a></li>
+					</ul>
+				</div>
+			</section>
+
+	</div>
+	<script>
+		document.getElementById('banner').classList.add('style2');
+		document.getElementById("header").classList.add('style2');
+		document.getElementById("head-button").innerText="Check out my projects";
+	</script>
+
+
+{% endblock %}
+

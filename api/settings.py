@@ -44,7 +44,9 @@ INSTALLED_APPS = [
 
     'authApi',
     'store',
-    'schedule'
+    "claySchedule",
+    'home',
+    'todo',
 ]
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
@@ -99,6 +101,7 @@ DATABASES = {
     }
 }
 
+DEFAULT_AUTO_FIELD='django.db.models.AutoField' 
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
