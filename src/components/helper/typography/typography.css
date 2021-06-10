@@ -1,0 +1,28 @@
+h2,h3,h4,h5,h6,p,p1{
+    font-family:sans-serif;
+}
+.text{
+    color: rgba(0,0,10,0.85);
+}
+h1{
+    font-size: clamp(2rem, 2.5vw, 2.5rem);
+}
+h2{
+    font-size: clamp(1.5rem, 2vw, 2rem);
+}
+h3{
+    font-size: clamp(1.1rem, 1.8vw, 1.5rem);
+}
+h4{
+    font-size: clamp(1rem, 1.5vw, 1.3rem);;
+}
+h5{
+    font-size: clamp(0.8rem, 1.3vw, 1.1rem);;
+}
+p1{
+    font-size:clamp(1.1rem,1.2vw,1.3rem)
+}
+p{
+    font-size:clamp(1.2rem,1.2vw,1.5rem)
+}
+

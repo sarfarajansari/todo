@@ -1,0 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
+
+.nav-container{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-family: Pacifico,'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    height: 100%;
+    color:rgb(230, 124, 124);
+}

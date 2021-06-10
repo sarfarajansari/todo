@@ -1,0 +1,43 @@
+.clock-container{
+    display:grid;
+    margin: 1rem;
+    background-color:rgba(159, 151, 243, 0.3);
+    font-size: 2rem;
+    color: white;
+    text-align: center;
+    margin-top:2rem;
+
+}
+.time{
+    font-size: 4rem;
+    text-align: center;
+    text-shadow: 2px 2px 8px #0e295c;
+    color: rgb(127, 82, 156);
+    margin-bottom: 1rem;
+}
+@media screen and (min-width:720px){
+    .clock-container{
+        margin:1rem 15%;
+    }
+    .time{
+        font-size:5rem;
+    }
+}
+
+@media screen and (min-width:960px){
+    .clock-container{
+        margin:1rem 20%;
+    }
+    .time{
+        font-size:6rem;
+    }
+}
+
+@media screen and (min-width:1080px){
+    .clock-container{
+        margin:1rem 30%;
+    }
+    .time{
+        font-size: 7rem;
+    }
+}
