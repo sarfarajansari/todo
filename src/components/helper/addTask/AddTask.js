@@ -10,15 +10,15 @@ const AddTask = (props) => {
         }
         Postreq("/todo/post/",body)
         setTimeout(()=>{
-            document.getElementById("todo").selected="selected"
             if(props.type===1){
+                document.getElementById("todo").selected="selected"
                 props.refresh()
             }
             else{
             props.update(0,localStorage.getItem("taskToken"))
             }
             setNewTask("")
-        },100)
+        },30)
 
     }
     const handleData =(e)=>{setNewTask(e.target.value)}

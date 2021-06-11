@@ -9,6 +9,5 @@ export default async function Getreq(url,set,loaded="") {
     if ("token" in data) {
         localStorage.setItem("taskToken",data.token)
     }
-    console.log(data)
     return 0
 }

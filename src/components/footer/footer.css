@@ -31,6 +31,7 @@ a:hover,svg:hover{
     text-align: center;
 }
 .social-name{
+    font-size: clamp(1.2rem,1.5vw,1.5rem);
     display:none;
 }
 @media screen and (min-width:720px){
