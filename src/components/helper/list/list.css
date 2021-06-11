@@ -1,8 +1,7 @@
 .list-container{
-    border: 1px solid white;
-    border-radius:0.5rem;
-    z-index: 30;
-    position: relative;
+    border-radius:1rem;
+    border: 2px solid #610606;
+    overflow: hidden;
 }
 .list-container div{
     display:flex;
@@ -16,12 +15,11 @@ input[type="checkbox"]{
     margin: 0 1rem;
 }
 .list-container div:nth-child(odd){
-    background-color: rgba(15, 19, 66, 1);
+    background-color: rgb(8, 10, 32);
 }
 .list-container div:nth-child(even){
     background-color: rgb(23, 179, 252);
 }
-
 @media screen and (min-width:720px){
     input[type="checkbox"]{
         margin: 0 2rem;

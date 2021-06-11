@@ -1,6 +1,6 @@
-import Getreq from "../request/get_request";
 import Postreq from "../request/post_request";
 import "./list.css";
+import {MdDone} from "react-icons/md"
 
 const Checkbox=(props)=>{
     const complete=(e)=>{
@@ -9,11 +9,9 @@ const Checkbox=(props)=>{
         if(e.target.checked){
             document.getElementById(p).style.textDecoration="line-through"
             document.getElementById(p).style.textDecorationColor="rgba(15, 19, 66, 1)"
-            document.getElementById(p).style.animation="fade 1s linear"
+            document.getElementById(p).parentNode.style.animation="fade 0.6s linear forwards"
             Postreq("/todo/complete/",{"token":token,"id":props.task.id})
-            var url = "/todo/get/0/"+token+"/" ;
-            Getreq(url,props.setdata)
-            
+            setTimeout(()=>props.update(0,token),500)            
             
         }
         else{
@@ -26,6 +24,7 @@ const Checkbox=(props)=>{
             <input  type="checkbox" name={"task" + String(task.id)} onChange={complete}/>
         )
     }
+    return <MdDone color="rgb(0, 255, 0)"/>
 }
 const List = (props) => {
     return (
@@ -36,7 +35,7 @@ const List = (props) => {
                 var delay =String((index * 500) +500)+"ms" ;
                 return(
                     <div style={{animationDuration:delay}}>
-                        <div><Checkbox setdata={props.setdata} task={task} index={index}/> </div>
+                        <div style={{background:"none"}}><Checkbox setdata={props.setdata} update={props.update} task={task} index={index}/> </div>
                          <p id={"p" + String(index)}>{task.task}</p>
                     </div>
                 )

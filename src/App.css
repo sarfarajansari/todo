@@ -26,21 +26,22 @@
 }
 
 .any-container{
-    padding: 1rem;
+    margin: 1rem;
+    padding:1rem;
 }
 
 @media screen and (min-width: 720px) {
     .any-container{
-        padding: 2rem 4%;
+        margin: 2rem 4%;
     }
 }
 @media screen and (min-width: 960px) {
     .any-container{
-        padding: 2rem 6%;
+        margin: 2rem 6%;
     }
 }
 @media screen and (min-width: 1080px) {
     .any-container{
-        padding: 2rem 11%;
+        margin: 2rem 11%;
     }
 }

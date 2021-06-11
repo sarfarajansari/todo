@@ -1,0 +1,83 @@
+.form-container{
+    padding: 0.2rem 2rem;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    text-align: center;
+    border: 2px solid #610606;
+
+}
+
+.form-container input[type="text"]{
+    border:0;
+    background:none;
+    display:block;
+    margin: 9px auto;
+    text-align: center;
+    border: 2px solid #3498db;
+    padding: 14px 10px;
+    width:200px;
+    outline:none;
+    color: white;
+    border-radius:1.5rem;
+    transition: 0.25s;
+}
+
+.form-container input[type="text"]:focus{
+    width:240px;
+    border-color: #2ecc71;
+}
+
+.form-container input[type="submit"]{
+    border:0;
+    background:none;
+    display:block;
+    margin: 20px auto;
+    text-align: center;
+    border: 2px solid #2ecc71;
+    padding: 14px 40px;
+    outline:none;
+    color: white;
+    border-radius:1.5rem;
+    transition: 0.25s;
+    cursor: pointer;
+}
+
+.form-container input[type="submit"]:hover{
+    background-color:#2ecc71;
+}
+
+@media screen and (min-width:720px){
+    .form-container input[type="text"]{
+        width:240px;
+    }
+    .form-container input[type="text"]:focus{
+        width:300px;
+    }
+    .form-container input[type="submit"]{
+        padding: 14px 48px;
+    }
+}
+
+@media screen and (min-width:960px){
+    .form-container input[type="text"]{
+        width:280px;
+    }
+    .form-container input[type="text"]:focus{
+        width:360px;
+    }
+    .form-container input[type="submit"]{
+        padding: 14px 56px;
+    }
+}
+@media screen and (min-width:1080px){
+    .form-container input[type="text"]{
+        width:320px;
+    }
+    .form-container input[type="text"]:focus{
+        width:400px;
+    }
+    .form-container input[type="submit"]{
+        padding: 14px 60px;
+    }
+}

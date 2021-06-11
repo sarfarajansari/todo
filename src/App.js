@@ -4,6 +4,7 @@ import Background from "./components/helper/background/background";
 import Nav from "./components/nav/nav";
 import "./components/helper/typography/typography.css"
 import Tasks from "./components/content/tasks";
+import Footer from "./components/footer/footer";
 
 
 function App() {
@@ -19,7 +20,7 @@ function App() {
         
 
         </div>
-      <div id="footer"><hr/></div>
+      <div id="footer"><hr/><Footer/>  </div>
     </div>
     }/>
     

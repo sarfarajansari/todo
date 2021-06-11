@@ -20,7 +20,7 @@
     background:rgba(250,250,255,0.2);
     animation:animate 20s linear infinite;
     padding:4em;
-    bottom:-150px;
+    bottom:-200px;
 }
 .box-area li:nth-child(1){
     left: 86%;
@@ -84,4 +84,10 @@
 
 .box-area li:hover{
     animation: opac linear ;
+}
+
+@media screen and (max-width:720px){
+    .box-area li{
+        bottom:-150px;
+    }
 }
