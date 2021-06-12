@@ -16,35 +16,27 @@ const Tasks = () => {
         if(localStorage.getItem("taskToken")!==null) {
             token= localStorage.getItem("taskToken")
         }
-        update(type, token)
-    }, [type]);
-    const update= (type,token)=>{
         var url = "/todo/get/" + String(type)+"/"+token+"/" ;
         Getreq(url,setdata)
-    }
+    }, [type]);
 
     const change =(e)=>{
+        console.log(e.target.value)
         setdata({
             tasks:[]
         })
         settype(e.target.value)
     }
-    const refresh =()=>{
-        setdata({
-            tasks:[]
-        })
-        settype(0)
-    }
     return (
         <div className="any-container content-container">
-            <AddTask refresh={refresh} type={type}  update={update}/>
+            <AddTask setdata={setdata} refresh={settype}   type={type} />
             <div id="lisType">
                 <select  onChange={change} >
                     <option id="todo" value={0}>TODO</option>
                     <option value={1}>Complete Task</option>
                 </select> 
             </div>
-            <List list={data.tasks} setdata={setdata}  update={update}/>
+            <List list={data.tasks} setdata={setdata}/>
         </div>
     );
 }

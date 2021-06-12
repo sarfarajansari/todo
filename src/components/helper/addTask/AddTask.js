@@ -1,6 +1,7 @@
-import { useState } from "react";
+import {  useState } from "react";
 import "./addTask.css"
 import Postreq from "../request/post_request"
+
 const AddTask = (props) => {
     const [NewTask, setNewTask] = useState("")
     const AddNewTask=(e)=>{
@@ -8,17 +9,10 @@ const AddTask = (props) => {
         var body = {
             task:NewTask
         }
-        Postreq("/todo/post/",body)
-        setTimeout(()=>{
-            if(props.type===1){
-                document.getElementById("todo").selected="selected"
-                props.refresh()
-            }
-            else{
-            props.update(0,localStorage.getItem("taskToken"))
-            }
-            setNewTask("")
-        },30)
+        setNewTask("")
+        document.getElementById("todo").selected="selected"
+        props.refresh(0)
+        Postreq("/todo/post/",body,props.setdata);
 
     }
     const handleData =(e)=>{setNewTask(e.target.value)}

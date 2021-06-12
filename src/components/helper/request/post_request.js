@@ -1,5 +1,7 @@
 import appData from "../appData/appData"
-export default function Postreq(url,body,set="",loaded=""){
+
+
+export default function Postreq(url,body,set="",loaded="",setalert=""){
     body.token =  localStorage.getItem('taskToken')
     var headers = { 'Content-Type': 'application/json' }
     if (localStorage.getItem('Token') !== null){
@@ -17,6 +19,12 @@ export default function Postreq(url,body,set="",loaded=""){
     .then((data)=>{
         if (set){
             set(data)
+        }
+        if("message" in data) {
+            if(setalert){
+                setalert(data.message)
+                console.log(data.message)
+            }    
         }
         if (loaded){
             loaded(0)
