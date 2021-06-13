@@ -1,5 +1,6 @@
 h2,h3,h4,h5,h6,p,p1{
     font-family:sans-serif;
+    margin: 0;
 }
 .text{
     color: rgba(0,0,10,0.85);

@@ -5,7 +5,7 @@
     padding: 1rem 0.5rem;
 }
 .social-icon,a{
-    color:rgb(23, 14, 53);
+    color:rgb(160, 135, 241);
 }
 svg{
     position: relative;
@@ -15,6 +15,7 @@ a:hover,svg:hover{
     color:rgb(59, 19, 241);
 }
 .tag{
+    color: antiquewhite;
     text-align: center;
     font-size:1.3rem;
     font-family: Pacifico,Arial, Helvetica, sans-serif;

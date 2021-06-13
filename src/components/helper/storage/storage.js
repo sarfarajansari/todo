@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 const initialState = {
-    alert:"sarfaraj"
+    loading:false,
+    alert:"",
+    alertType:"",
 }
 
 export const Context = React.createContext();

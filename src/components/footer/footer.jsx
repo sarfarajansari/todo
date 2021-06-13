@@ -7,7 +7,7 @@ import "./footer.css"
 export default function Footer() {
     return (
         <div className="footer-container">
-            <div className="tag">@2021 Sarfarajansari <hr/></div>
+            <div className="tag">@2021 Sarfarajansari </div>
             <p style={{textAlign:"center",fontSize:"2rem",marginBottom:"1rem",color:"white"}}>Social</p>
             <div className="social-item">
                  <a href="https://twitter.com/Sarfraj49393426"><AiFillTwitterCircle  className="social-icon main"/><div className="social-name" >Twitter</div></a>
