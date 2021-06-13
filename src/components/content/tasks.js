@@ -13,8 +13,7 @@ const Tasks = () => {
     const [storage,setStorage] = useState({
         loading: true,
         alert:"",
-        alertType:"",
-        dataType:""
+        alertType:""
     })
     const  [type, settype] = useState(0)
     const [data, setdata] = useState({
@@ -26,7 +25,6 @@ const Tasks = () => {
         for(var i =0 ;i<lists.length;i++){
             current_state[lists[i][0]]=lists[i][1]
         }
-        console.log(current_state)
         setStorage(current_state)
     }
 
