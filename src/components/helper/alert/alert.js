@@ -1,24 +1,19 @@
-import React,{ useContext,useEffect ,useState} from 'react';
-import {Context} from "../storage/storage"
+import React,{ useEffect ,useState} from 'react';
 import "./alert.css"
 
 
-const Alert = () => {
-    const [state,setState] = useContext(Context)
-    const forceUpdate = useForceUpdate();
+const Alert = (props) => {
     useEffect(() => {
         window.onscroll=()=>{
-            var current_state = state;
-            current_state.alert="";
-            current_state.alertType="";
-            setState(current_state)
+            props.update([["alert",""]])
         }
-        setInterval(forceUpdate,10)
     },[])
-    if(state.alert){
+    if(props.alert){
         return (
-            <div  className={"alert " + state.alertType} id="alert" role="alert">
-                <p>{state.alert}</p>
+            <div  className="alertContainer">
+                <div  className={"alert " + props.alertType} id="alert" role="alert">
+                    <p>{props.alert}</p>
+                </div>
             </div>
         )
     }

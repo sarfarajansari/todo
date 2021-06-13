@@ -1,17 +1,24 @@
-import { useState,useEffect ,useContext} from "react"
+import { useState,useEffect} from "react"
 import "./tasks.css"
 import Getreq from "../helper/request/get_request"
 import List from "../helper/list/list"
 import AddTask from "../helper/addTask/AddTask"
-import {Context} from "../helper/storage/storage"
 import Loading from "../helper/alert/loading"
 import Alert from "../helper/alert/alert"
+import {useForceUpdate} from "../helper/alert/alert"
 
 
 const Tasks = () => {
-    const [state,setState] = useContext(Context)
+    const forceUpdate = useForceUpdate();
     const [storage,setStorage] = useState({
-        loading: true
+        loading: true,
+        alert:"",
+        alertType:"",
+        dataType:""
+    })
+    const  [type, settype] = useState(0)
+    const [data, setdata] = useState({
+        tasks:[]
     })
 
     const updateStorage =(lists)=>{
@@ -23,17 +30,14 @@ const Tasks = () => {
         setStorage(current_state)
     }
 
-    const  [type, settype] = useState(0)
-    const [data, setdata] = useState({
-        tasks:[]
-    })
+    useEffect(() =>setInterval(forceUpdate,10), [])
     useEffect(() => {
         var token="create"
         if(localStorage.getItem("taskToken")!==null) {
             token= localStorage.getItem("taskToken")
         }
         var url = "/todo/get/" + String(type)+"/"+token+"/" ;
-        Getreq(url,setdata,updateStorage,setState,state)
+        Getreq(url,setdata,updateStorage)
     }, [type]);
 
     const change =(e)=>{
@@ -45,16 +49,16 @@ const Tasks = () => {
     return (
         <>
             <Loading loading={storage.loading}/>
-            <Alert/>
+            <Alert alert={storage.alert} update={updateStorage} alertType={storage.alertType} />
             <div className={storage.loading?"any-container content-container loading":"any-container content-container"}>
-                <AddTask setdata={setdata} refresh={settype}   type={type} />
+                <AddTask  update={updateStorage} setdata={setdata} refresh={settype}   type={type} />
                 <div id="lisType">
                     <select  onChange={change} >
                         <option id="todo" value={0}>TODO</option>
                         <option value={1}>Complete Task</option>
                     </select> 
                 </div>
-                <List  list={data.tasks} setdata={setdata}/>
+                <List update={updateStorage} list={data.tasks} setdata={setdata}/>
             </div>
         </>
     );

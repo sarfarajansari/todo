@@ -7,48 +7,33 @@ export function handleErrors(response) {
     }
     return response;
 }
-export default  function Getreq(url,set,updateStorage="",setstate="",state="") {
+export default  function Getreq(url,set,update) {
+    update([["loading",true]])
     fetch(appData.url+ url)
     .then(handleErrors)
     .then(response=>response.json())
     .then((data) =>{
         if(data.status==0){
             set(data)
+            update([["loading",false]])
             if ("token" in data) {
                 localStorage.setItem("taskToken",data.token)
             }
         }
         else{
+            update([["alert",""]])
+            setTimeout(()=>{
+                update([["alert","some error occured please refresh !"],["alertType","error"],["loading",false]])
+            },5) 
             if(data.message=="User not found"){
                 localStorage.removeItem("taskToken")
-                if(setstate && state){
-                    var current_state = state;
-                    current_state.alert ="";
-                    current_state.alertType ="";
-                    setstate(current_state)
-                    setTimeout(()=>{
-                        current_state.alert = "some error occured please refresh !";
-                        current_state.alertType="error"
-                        setstate(current_state)
-                    },5)
-                }
             }
         }
     })
     .catch((error)=>{
-        if(setstate && state){
-            var current_state = state;
-            current_state.alert ="";
-            current_state.alertType ="";
-            setstate(current_state)
-            setTimeout(()=>{
-                current_state.alert = "some error occured please refresh!";
-                current_state.alertType="error"
-                setstate(current_state)
-            },5)
-        } 
+        update([["alert",""]])
+        setTimeout(()=>{
+            update([["alert","some error occured please refresh! Please check your internet connection"],["alertType","error"],["loading",false]])
+        },5) 
     })
-    if(updateStorage){
-        updateStorage([["loading",false]])
-    }
 }

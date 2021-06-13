@@ -3,7 +3,8 @@ import {handleErrors} from "./get_request"
 
 
 
-export default function Postreq(url,body,set="",update="",setstate="",state=""){
+export default function Postreq(url,body,update,set="",){
+    update([["loading",true]])
     body.token =  localStorage.getItem('taskToken')
     var headers = { 'Content-Type': 'application/json' }
     // if (localStorage.getItem('Token') !== null){
@@ -22,35 +23,22 @@ export default function Postreq(url,body,set="",update="",setstate="",state=""){
             set(data)
         }
         if("message" in data) {
-            if(setstate && state){
-                var current_state = state;
-                current_state.alert ="";
-                current_state.alertType ="";
-                setstate(current_state)
-                setTimeout(()=>{
-                    current_state.alert = data.message;
-                    if(data.status){
-                        current_state.alertType = data.status==0?"message":"error"
-                    }
-                    else{
-                        current_state.alertType="message"
-                    }
-                    setstate(current_state)
-                },5)
-            }  
+            update([["alert",""]])
+            setTimeout(()=>{
+                var type = "message"
+                if(data.status){
+                    type = data.status==0?"message":"error"
+                }
+                update([["alert",data.message],["alertType",type],["loading",false]])
+            },5) 
         }
+        else{update([["loading",false]])}
     })
     .catch((error)=>{
-        if(setstate && state){
-            var current_state = state;
-            current_state.alert ="";
-            current_state.alertType ="";
-            setstate(current_state)
-            setTimeout(()=>{
-                current_state.alert = "some error occured please refresh!";
-                current_state.alertType="error"
-                setstate(current_state)
-            },5)
-        }
+        update([["alert",""]])
+        setTimeout(()=>{
+            update([["alert","some error occured please refresh!"],["alertType","error"],["loading",false]])
+        },5)
     })
+    
 }

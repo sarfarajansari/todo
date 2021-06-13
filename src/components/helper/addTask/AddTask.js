@@ -1,20 +1,16 @@
-import {  useState , useContext} from "react";
+import {  useState } from "react";
 import "./addTask.css"
 import Postreq from "../request/post_request"
-import {Context} from "../storage/storage"
 
 const AddTask = (props) => {
-    const [state,setState] = useContext(Context)
     const [NewTask, setNewTask] = useState("")
     const AddNewTask=(e)=>{
         e.preventDefault();
-        var body = {
-            task:NewTask
-        }
+        var body = {task:NewTask}
         setNewTask("")
         document.getElementById("todo").selected="selected"
         props.refresh(0)
-        Postreq("/todo/post/",body,props.setdata,false,setState,state);
+        Postreq("/todo/post/",body,props.update,props.setdata);
 
     }
     const handleData =(e)=>{setNewTask(e.target.value)}

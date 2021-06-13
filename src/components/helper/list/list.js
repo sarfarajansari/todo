@@ -1,25 +1,20 @@
 import Postreq from "../request/post_request";
 import "./list.css";
 import {MdDone} from "react-icons/md"
-import {  useContext} from "react";
-import {Context} from "../storage/storage"
 
 
 
 const Checkbox=(props)=>{
-    const [state,setState] = useContext(Context)
     const complete=(e)=>{
         var token = localStorage.getItem("taskToken")
         if(e.target.checked){
             e.target.checked=false
-            Postreq("/todo/complete/",{"token":token,"id":props.task.id},props.setdata,props.update,setState,state)
+            Postreq("/todo/complete/",{"token":token,"id":props.task.id},props.update,props.setdata)
         }
         else{
             document.getElementById(p).style.textDecoration="none"
         }
     }
-
-
     const task = props.task
     if(!task.done){
         return(

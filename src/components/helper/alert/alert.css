@@ -12,12 +12,16 @@
 .alert{
     position: fixed;
     border-radius:1.5rem;
-    width:calc(100% - 2rem);
     z-index: 31;
+    width:100%;
     padding:1rem;
     top: 80px;
     opacity: 1;
     animation:fade 5s linear forwards;
+}
+.alertContainer{
+    display:flex;
+    justify-content:center;
 }
 .alert.message{
     background-color:rgba(125, 172, 132, 0.918);
@@ -42,7 +46,6 @@
 
 @media screen and (min-width:720px){
     .alert{
-        margin: 0 15%;
         width:70%;
     }
 }
