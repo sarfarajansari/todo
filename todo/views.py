@@ -25,6 +25,10 @@ def getTasks(request,done,token):
     except:
         return Response({"status":1,"message":"User not found"})
 
+def taskofUser(user):
+    tasks = user.tasks.filter(done=False)
+    data = TaskSerializer(tasks,many=True).data
+    return data
 
 @api_view(["POST"])
 def postTask(request):
@@ -35,7 +39,7 @@ def postTask(request):
         except:
             return Response({"status":1,"message":"User not found"})
         Task.objects.create(task=data["task"],done=False,user=user)
-        return Response({"status":0,"message":"Task added"})
+        return Response({"status":0,"message":"Task added","tasks":taskofUser(user)})
     return Response({"status":1,"message":"Invalid task"})
 
 
@@ -51,7 +55,7 @@ def completeTask(request):
         task.done = True
         task.complete_date = datetime.utcnow() + timedelta(hours=5,minutes=30)
         task.save()
-        return Response({"status":0,"message":"Task Completed"})
+        return Response({"status":0,"message":"Task Completed","tasks":taskofUser(user)})
     return Response({"status":1,"message":"Invalid task"})
 
 @api_view(["POST"])
@@ -64,5 +68,5 @@ def delTask(request):
             return Response({"status":1,"message":"User not found"})
         task = Task.objects.get(user=user,pk=data["id"])
         task.delete()
-        return Response({"status":0,"message":"Task Deleted"})
+        return Response({"status":0,"message":"Task Deleted","tasks":taskofUser(user)})
     return Response({"status":1,"message":"Invalid task"})

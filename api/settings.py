@@ -41,12 +41,15 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'rest_framework.authtoken',
+    'cloudinary',
+    'cloudinary_storage',
 
     'authApi',
     'store',
     "claySchedule",
     'home',
     'todo',
+    'ludo',
 ]
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
@@ -148,5 +151,12 @@ MEDIA_URL = '/media/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR,"static/media")
 
+DEFAULT_FILE_STORAGE =  'cloudinary_storage.storage.MediaCloudinaryStorage'
+
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME':'dnppl93qm',
+    'API_KEY':'376475463995936',
+    'API_SECRET':'0u2e209MFu1bkrxxXUj-8CG5GTE'
+}
 # Activate Django-Heroku.
 django_heroku.settings(locals())

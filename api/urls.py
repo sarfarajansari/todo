@@ -25,6 +25,7 @@ urlpatterns = [
     path("schedule/",include("claySchedule.urls")),
     path("portfolio/",include("home.urls")),
     path("todo/",include("todo.urls")),
+    path("ludo/",include("ludo.urls")),
 ]
 
 urlpatterns+= static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)

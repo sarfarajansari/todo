@@ -10,7 +10,7 @@ class Product(models.Model):
     name=models.CharField(max_length=200,null=True)
     price=models.FloatField()
     digital=models.BooleanField(default=False,null=True)
-    image= models.ImageField(null=True,blank=True)
+    image= models.ImageField(null=True,blank=True,upload_to='store')
     type = models.CharField(blank=True,null=True,default="",max_length=200)   
     weight = models.CharField(blank=True,null=True,default="",max_length=200)
     dimensions = models.CharField(blank=True,null=True,default="",max_length=200)
