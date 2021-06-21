@@ -1,9 +1,11 @@
+from re import S
 from django.db import models
 from .intial import initial_position,colors
-from .path import Paths
+from .path import Paths,safe
 
 
 # Create your models here.
+# whos turn? : everything initialized
 
 class Game(models.Model):
     winnerId = models.IntegerField(null=True,blank=True)
@@ -12,8 +14,16 @@ class Game(models.Model):
     runnerup2 = models.CharField(default="",max_length=40)
     loser = models.CharField(default="",max_length=40)
     ended = models.BooleanField(default=False)
+    turn = models.IntegerField(default=0)
     No_of_players = models.IntegerField()
     dateTime = models.DateTimeField(auto_now_add=True)
+
+    def check_attack(self,c):
+        for player in self.players.all():
+            if not player.colorId ==c.player.colorId:
+                for b in player.coordinates.all():
+                    if b.x == c.x and b.y == c.y:
+                        b.initialize()
 
     @property
     def get_winner(self):
@@ -117,6 +127,8 @@ class Game(models.Model):
         return f"{self.id}. {self.No_of_players} players ,time : {self.dateTime}"
 
     def reinitialize(self):
+        self.turn = 0
+        self.save()
         for p in list(self.players.all()):
             if p.colorId==0:
                 p.turn = True
@@ -126,8 +138,34 @@ class Game(models.Model):
                 coordinate.y= initial_position[p.colorId][coordinate.number][0]
                 coordinate.x= initial_position[p.colorId][coordinate.number][1]
                 coordinate.initial = True
+                coordinate.reached = False
                 coordinate.save()
             p.save()
+
+
+    def nextTurn(self,colorId):
+        if colorId >= 3 :
+            return 0;
+        else:
+            return colorId + 1;
+    def nextPlayer(self,colorId,playerlists):
+        if self.nextTurn(colorId) in playerlists:
+            return self.nextTurn(colorId)
+        return self.nextPlayer(self.nextTurn(colorId),playerlists)
+    def get_next_turn(self):
+        l = []
+        for player in self.players.all():
+            player.turn = False
+            player.save()
+            if not player.complete:
+                l.append(player.colorId)
+
+        nextplayer = self.nextPlayer(self.turn,l)
+        Np = self.players.get(colorId=nextplayer)
+        Np.turn = True
+        Np.save()
+        self.turn = nextplayer
+        self.save()
 
 
 class Player(models.Model):
@@ -142,13 +180,37 @@ class Player(models.Model):
             return f"{self.name} : game {self.game.id}"
         return f"{self.color} : game {self.game.id}"
 
+    
     @property
     def complete(self):
         for c in self.coordinates.all():
             if not c.reached:
                 return False
         return True
+    @property
+    def onground(self):
+        for c in self.coordinates.all():
+            if not c.initial and not c.reached :
+                return True
+        return False
 
+    def update_turn(self,stepped):
+        if not stepped:
+            for c in self.coordinates.all():
+                if not c.initial and not c.reached:
+                    return False
+        self.game.get_next_turn()
+        return True
+    @property
+    def singleturn(self):
+        data = []
+        for c in self.coordinates.all():
+            if not c.initial and not c.reached :
+                data.append(c.number)
+        if len(data)==1:
+            return {"value":True,"number":data[0]}
+        return {"value":False}
+        
 
 
 
@@ -166,9 +228,10 @@ class Coordinates(models.Model):
     def initialize(self):
         self.y = initial_position[self.player.colorId][self.number][0]
         self.x = initial_position[self.player.colorId][self.number][1]
+        self.initial = True
         self.save()
 
-    def step(self,step):
+    def step(self,step,fake):
         if step> 6 or step<1:
             return False
         if self.reached:
@@ -194,11 +257,17 @@ class Coordinates(models.Model):
                 if [self.y ,self.x] == Paths[self.player.colorId][56]:
                     self.reached = True
                 self.save()
+
+                if not self.safe() and not fake:
+                    self.player.game.check_attack(self)
                 return True
             if pos == current:
                 start = True
 
         return False
+
+    def safe(self):
+        return [self.y, self.x] in safe or [self.y, self.x] in initial_position[self.player.colorId]
 
 
 class GameToken(models.Model):

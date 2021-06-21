@@ -39,7 +39,6 @@ def Reinitialize(request,token):
 
 
 
-
 @api_view(["POST"])
 def Play(request,token):
     try:
@@ -53,13 +52,36 @@ def Play(request,token):
         except:
             return Response(add_message_status(1,GameSerializer(game).data))
         if "step" in data:
-            stepped = c.step(data["step"])
-            return Response(add_message_status(0,GameSerializer(game).data))
+            if "fake" in data.keys():
+                stepped = c.step(data["step"],data["fake"])
+            else:
+                stepped = c.step(data["step"],False)
+            if stepped and data["step"]==6:
+                rolled = False
+            else:
+                if not "fake" in data.keys():
+                    rolled = not c.player.update_turn(stepped)
+                else:
+                    rolled = False
+            data = add_message_status(0,GameSerializer(game).data)
+            data["rolled"] = rolled
+            return Response(data)
         elif "initialize" in data:
             if data["initialize"]:
                 c.initialize()
                 return Response(add_message_status(0,GameSerializer(game).data))
     return Response(add_message_status(1,GameSerializer(game).data))
+
+@api_view(["POST"])
+def nextplayer(request,token):
+    try:
+        game = GameToken.objects.get(key=token).game
+    except:
+        return Response({"status":1,"message":"invalid game"})
+    game.get_next_turn()
+    data = add_message_status(1,GameSerializer(game).data)
+    data['rolled']=False
+    return Response(data)
 
 
 
