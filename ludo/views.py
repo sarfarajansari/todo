@@ -19,10 +19,10 @@ def newGame(request):
             game.initialize(request.data["listPlayers"],request.data["names"])
         else:
             game.initialize(request.data["listPlayers"])
-        token = GameToken(key = get_random_string(20),game=game)
-        data =GameSerializer(game).data
-        data["token"] = token
-        data = add_message_status(0,data)
+        key =get_random_string(20)
+        token = GameToken(key = key,game=game)
+        token.save()
+        data = add_message_status(0,{"token":key})
         return Response(data)
     return Response(add_message_status(1,{},"Could not start game. Please retry!"))
 
@@ -32,6 +32,19 @@ def Reinitialize(request,token):
         game = GameToken.objects.get(key=token).game
         game.reinitialize()
         data = add_message_status(0,GameSerializer(game).data)
+        return Response(data)
+    except:
+        return Response({"status":1,"message":"could not restart game"})
+
+@api_view(["GET","POST"])
+def getGame(request,token):
+    try:
+        game = GameToken.objects.get(key=token).game
+        data = add_message_status(0,GameSerializer(game).data)
+        data["rolled"]=False
+        data["old"]=[0,0]
+        data["dice"]=4
+        data["steps"]=[]
         return Response(data)
     except:
         return Response({"status":1,"message":"could not restart game"})
@@ -46,31 +59,25 @@ def Play(request,token):
     except:
         return Response({"status":1,"message":"invalid game"})
     data = request.data
-    if "colorId" in data and "number" in data:
+    if "colorId" in data and "number" in data and "step" in data:
         try:
             c = game.players.get(colorId=data["colorId"]).coordinates.get(number=data["number"])
         except:
-            return Response(add_message_status(1,GameSerializer(game).data))
-        if "step" in data:
-            if "fake" in data.keys():
-                stepped = c.step(data["step"],data["fake"])
+            return Response(add_message_status(1,{"steps":[]}))
+        if data["colorId"]== c.player.colorId:
+            old = [c.y, c.x]
+            stepped ,steps= c.step(data["step"])
+
+            if data["step"]==6:
+                rolled=False
             else:
-                stepped = c.step(data["step"],False)
-            if stepped and data["step"]==6:
-                rolled = False
-            else:
-                if not "fake" in data.keys():
-                    rolled = not c.player.update_turn(stepped)
-                else:
-                    rolled = False
-            data = add_message_status(0,GameSerializer(game).data)
-            data["rolled"] = rolled
+                rolled = not c.player.update_turn(stepped)
+            Gamedata = GameSerializer(game).data
+            Gamedata["steps"],Gamedata["rolled"],Gamedata["old"] = steps,rolled,old
+
+            data = add_message_status(0,Gamedata)
             return Response(data)
-        elif "initialize" in data:
-            if data["initialize"]:
-                c.initialize()
-                return Response(add_message_status(0,GameSerializer(game).data))
-    return Response(add_message_status(1,GameSerializer(game).data))
+    return Response(add_message_status(1,{}))
 
 @api_view(["POST"])
 def nextplayer(request,token):
@@ -79,8 +86,9 @@ def nextplayer(request,token):
     except:
         return Response({"status":1,"message":"invalid game"})
     game.get_next_turn()
-    data = add_message_status(1,GameSerializer(game).data)
+    data = add_message_status(0,GameSerializer(game).data)
     data['rolled']=False
+    data["steps"]=[]
     return Response(data)
 
 

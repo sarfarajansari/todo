@@ -231,26 +231,28 @@ class Coordinates(models.Model):
         self.initial = True
         self.save()
 
-    def step(self,step,fake):
+    def step(self,step):
         if step> 6 or step<1:
-            return False
+            return False,[]
         if self.reached:
-            return False
+            return False,[]
         if self.initial:
             if step ==6:
                 self.y = Paths[self.player.colorId][0][0]
                 self.x = Paths[self.player.colorId][0][1]
                 self.initial = False
                 self.save()
-                return True
-            return False
+                return True,[]
+            return False , []
 
         current = [self.y,self.x]
         start = False
         step_up = 0
+        steps = []
         for pos in Paths[self.player.colorId]:
             if start:
-                step_up +=1
+                step_up +=1 
+                steps.append(pos)
             if step_up ==step:
                 self.y = pos[0]
                 self.x = pos[1]
@@ -258,13 +260,13 @@ class Coordinates(models.Model):
                     self.reached = True
                 self.save()
 
-                if not self.safe() and not fake:
+                if not self.safe():
                     self.player.game.check_attack(self)
-                return True
+                return True ,steps
             if pos == current:
                 start = True
-
-        return False
+        
+        return False,steps
 
     def safe(self):
         return [self.y, self.x] in safe or [self.y, self.x] in initial_position[self.player.colorId]
