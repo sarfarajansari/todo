@@ -5,7 +5,6 @@ from .path import Paths,safe
 
 
 # Create your models here.
-# whos turn? : everything initialized
 
 class Game(models.Model):
     winnerId = models.IntegerField(null=True,blank=True)
