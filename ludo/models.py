@@ -103,6 +103,7 @@ class Game(models.Model):
     
 
     def initialize(self,list_players,names=[]):
+        self.turn = list_players[0]
         self.save()
         players = []
         for i in list_players:

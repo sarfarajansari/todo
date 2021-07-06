@@ -11,10 +11,17 @@ def add_message_status(status,data, message=""):
         data["message"] = message
     return data
 
+def get_index(players,colorId):
+    for i in range(len(players)):
+        if players[i]["colorId"] == colorId:
+            return i
+    return False
+
+
 @api_view(["POST"])
 def newGame(request):
     if "listPlayers" in request.data:
-        game = Game(len(request.data["listPlayers"]))
+        game = Game(No_of_players=len(request.data["listPlayers"]))
         if "names" in request.data:
             game.initialize(request.data["listPlayers"],request.data["names"])
         else:
@@ -59,24 +66,24 @@ def Play(request,token):
     except:
         return Response({"status":1,"message":"invalid game"})
     data = request.data
-    if "colorId" in data and "number" in data and "step" in data:
-        try:
-            c = game.players.get(colorId=data["colorId"]).coordinates.get(number=data["number"])
-        except:
-            return Response(add_message_status(1,{"steps":[]}))
-        if data["colorId"]== c.player.colorId:
-            old = [c.y, c.x]
-            stepped ,steps= c.step(data["step"])
-
-            if data["step"]==6:
-                rolled=False
-            else:
-                rolled = not c.player.update_turn(stepped)
-            Gamedata = GameSerializer(game).data
-            Gamedata["steps"],Gamedata["rolled"],Gamedata["old"] = steps,rolled,old
-
-            data = add_message_status(0,Gamedata)
-            return Response(data)
+    if "ended" in data and "loser" in data and "players" in data and "runnerup1" in data and "runnerup2" in data and "turn" in data and "winner" in data and "winnerId" in data:
+        game.ended = data["ended"]
+        game.loser = data["loser"]
+        game.runnerup1 = data["runnerup1"]
+        game.runnerup2 = data["runnerup2"]
+        game.turn = data["turn"]
+        game.winnerId = data["winnerId"]
+        game.winner = data["winner"]
+        game.save()
+        for player in game.players.all():
+            for c in player.coordinates.all():
+                coordinate = data["players"][get_index(data["players"],player.colorId)]["coordinates"][c.number]
+                c.x = coordinate["x"]
+                c.y = coordinate["y"]
+                c.initial= coordinate["initial"]
+                c.reached= coordinate["reached"]
+                c.save()
+        return Response(add_message_status(0,{}))
     return Response(add_message_status(1,{}))
 
 @api_view(["POST"])
