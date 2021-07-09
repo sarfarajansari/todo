@@ -52,7 +52,6 @@ INSTALLED_APPS = [
     'todo',
     'ludo',
     'onlineLudo',
-    'channels'
 ]
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
@@ -161,12 +160,4 @@ CLOUDINARY_STORAGE = {
     'CLOUD_NAME':'dnppl93qm',
     'API_KEY':'376475463995936',
     'API_SECRET':'0u2e209MFu1bkrxxXUj-8CG5GTE'
-}
-# Activate Django-Heroku.
-ASGI_APPLICATION = 'api.routing.application'
-
-CHANNEL_LAYERS = {
-    "default": {
-        "BACKEND": "channels.layers.InMemoryChannelLayer"
-    }
 }
