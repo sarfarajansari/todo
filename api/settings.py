@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
     'rest_framework',
     'corsheaders',
     'rest_framework.authtoken',
@@ -50,6 +51,8 @@ INSTALLED_APPS = [
     'home',
     'todo',
     'ludo',
+    'onlineLudo',
+    'channels'
 ]
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
@@ -71,7 +74,8 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 CORS_ORIGIN_WHITELIST = [
-    "http://localhost:3000"
+    "http://localhost:3000",
+    "https://sarfarajansari.github.io"
 ]
 ROOT_URLCONF = 'api.urls'
 
@@ -159,4 +163,10 @@ CLOUDINARY_STORAGE = {
     'API_SECRET':'0u2e209MFu1bkrxxXUj-8CG5GTE'
 }
 # Activate Django-Heroku.
-django_heroku.settings(locals())
+ASGI_APPLICATION = 'api.routing.application'
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer"
+    }
+}

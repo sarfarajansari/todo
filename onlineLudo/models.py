@@ -1,12 +1,15 @@
+from django.db import models
+from store.views import get_random_string
+# Create your models here.
 from re import S
 from django.db import models
-from .intial import initial_position,colors
-from .path import Paths,safe
+from ludo.intial import initial_position,colors
+from ludo.path import Paths,safe
 
 
 # Create your models here.
 
-class Game(models.Model):
+class OnlineGame(models.Model):
     winnerId = models.IntegerField(null=True,blank=True)
     winner = models.CharField(default="",max_length=40)
     runnerup1 = models.CharField(default="",max_length=40)
@@ -14,8 +17,8 @@ class Game(models.Model):
     loser = models.CharField(default="",max_length=40)
     ended = models.BooleanField(default=False)
     turn = models.IntegerField(default=0)
-    No_of_players = models.IntegerField()
     dateTime = models.DateTimeField(auto_now_add=True)
+    lastTurn = models.IntegerField(default=-1)
 
     def check_attack(self,c):
         for player in self.players.all():
@@ -24,6 +27,9 @@ class Game(models.Model):
                     if b.x == c.x and b.y == c.y:
                         b.initialize()
 
+    @property
+    def n(self):
+        return len(list(self.players.all()))
     @property
     def get_winner(self):
         if self.winner:
@@ -89,42 +95,19 @@ class Game(models.Model):
         self.save()
         return True
 
-                
-                
 
-
-    def get_initial_coordinates(self,color,player):
-        positions = initial_position[color]
-        i=0
-        for p in positions:
-            coo = Coordinates(y=p[0] , x =p[1],player=player,number=i)
-            coo.save()
-            i+=1
-    
-
-    def initialize(self,list_players,names=[]):
-        self.turn = list_players[0]
+    def initialize(self,colorId,name=""):
+        self.turn = colorId
         self.save()
-        players = []
-        for i in list_players:
-            player =Player(colorId=i,game=self,color=colors[i])
-            players.append(player)
-
-            if list_players[0]==i:
-                player.turn = True
-            else:
-                player.turn = False
-            player.save()
-            self.get_initial_coordinates(i,player)
-            if len(list(self.players.all())) >= 4:
-                return True
-        
-        for i in range(len(names)):
-            players[i].name = names[i]
-            players[i].save()
+        player =OnlinePlayer(colorId=colorId)
+        player.turn = True
+        player.initialize(self,name=name)
+        player.host = True
+        player.save()
+        return player.token
 
     def __str__(self):
-        return f"{self.id}. {self.No_of_players} players ,time : {self.dateTime}"
+        return f"{self.id}. {len(list(self.players.all()))} players ,time : {self.dateTime}"
 
     def reinitialize(self):
         self.turn = 0
@@ -168,12 +151,30 @@ class Game(models.Model):
         self.save()
 
 
-class Player(models.Model):
+class OnlinePlayer(models.Model):
     name = models.CharField(max_length=50,default="")
     turn=models.BooleanField(default=False)
-    color = models.CharField(max_length=30)
+    color = models.CharField(max_length=30,default="")
     colorId = models.IntegerField()
-    game = models.ForeignKey(Game,on_delete=models.CASCADE,related_name="players")
+    token = models.CharField(max_length=30,default="")
+    game = models.ForeignKey(OnlineGame,on_delete=models.CASCADE,related_name="players")
+    active = models.BooleanField(default=False)
+    host = models.BooleanField(default=False)
+    
+
+
+    def initialize(self,game,name=""):
+        self.name = name
+        self.color = colors[self.colorId]
+        self.token = get_random_string(10)
+        self.game = game
+        self.save()
+        for i in range(4):
+            c = Coord(number=1,player=self)
+            c.initialize()
+            c.save()
+
+        
 
     def __str__(self):
         if(self.name):
@@ -212,13 +213,13 @@ class Player(models.Model):
         return {"value":False}
         
 
-class Coordinates(models.Model):
-    y=models.IntegerField()
-    x=models.IntegerField()
+class Coord(models.Model):
+    y=models.IntegerField(default=0)
+    x=models.IntegerField(default=0)
     number = models.IntegerField()
     initial = models.BooleanField(default=True)
     reached = models.BooleanField(default=False)
-    player = models.ForeignKey(Player,on_delete=models.CASCADE,related_name="coordinates")
+    player = models.ForeignKey(OnlinePlayer,on_delete=models.CASCADE,related_name="coordinates")
 
     def __str__(self):
         return f"{self.player.color}{self.number} : ({self.x}, {self.y}) "
@@ -270,18 +271,18 @@ class Coordinates(models.Model):
         return [self.y, self.x] in safe or [self.y, self.x] in initial_position[self.player.colorId]
 
 
-class GameToken(models.Model):
+class OnlineGameToken(models.Model):
     key = models.CharField(max_length=30)
-    game = models.OneToOneField(Game, related_name="token",on_delete=models.CASCADE)
+    game = models.OneToOneField(OnlineGame, related_name="token",on_delete=models.CASCADE)
 
     def __str__(self):
         return self.key
 
 
-class ChatMessage(models.Model):
+class Message(models.Model):
     name = models.CharField(max_length=50,default="log")
     text = models.CharField(max_length=300)
-    game = models.ForeignKey(Game,on_delete=models.CASCADE,related_name="msgs")
+    game = models.ForeignKey(OnlineGame,on_delete=models.CASCADE,related_name="msgs")
     
 
     

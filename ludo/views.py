@@ -83,6 +83,7 @@ def Play(request,token):
                 c.initial= coordinate["initial"]
                 c.reached= coordinate["reached"]
                 c.save()
+
         return Response(add_message_status(0,{}))
     return Response(add_message_status(1,{}))
 
