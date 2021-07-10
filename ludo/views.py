@@ -1,7 +1,7 @@
-from .models import Game,GameToken
+from .models import Game,GameToken,ChatMessage
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from .serializers import GameSerializer
+from .serializers import GameSerializer,MessageSerializer
 from store.views import get_random_string
 
 
@@ -105,6 +105,29 @@ def nextplayer(request,token):
 def test(request):
     game = Game.objects.first()
     return Response(add_message_status(1,GameSerializer(game).data,"this is test"))
+
+@api_view(["GET"])
+def getMessage(request,token):
+    try:
+        game = GameToken.objects.get(key=token).game
+    except:
+        return Response({"status":1,"message":"invalid game"})
+    
+    messages =MessageSerializer(game.msgs.all(),many=True).data
+    return Response({"status":0,"data":messages,"type":1})
+
+@api_view(["POST"])
+def sendMessage(request):
+    data = request.data
+    print(data)
+    if "message" in data and "token" in data:
+        try:
+            game = GameToken.objects.get(key=data["token"]).game
+        except:
+            return Response({})
+        ChatMessage.objects.create(game=game,text =data["message"])
+        return Response({})
+    return Response({})
 
         
 

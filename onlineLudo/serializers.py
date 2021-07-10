@@ -11,7 +11,7 @@ class PlayerSerializer(serializers.ModelSerializer):
     coordinates = CoordinateSerializer(many=True)
     class Meta:
         model = Player
-        fields =["name","turn","color","colorId","complete","coordinates","onground","singleturn","active","host"]
+        fields =["name","turn","color","colorId","complete","coordinates","onground","singleturn","active","host","updateMessage","updateGame"]
 
 class GameSerializer(serializers.ModelSerializer):
     players = PlayerSerializer(many=True)

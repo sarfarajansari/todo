@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Game,Coordinates,Player
+from .models import Game,Coordinates,Player,ChatMessage
 
 class CoordinateSerializer(serializers.ModelSerializer):
     class Meta:
@@ -18,3 +18,8 @@ class GameSerializer(serializers.ModelSerializer):
     class Meta:
         model = Game
         fields =["winnerId","get_winner","runnerup1","runnerup2","loser","is_ended","turn","players"]
+
+class MessageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ChatMessage
+        fields =["name","text"]

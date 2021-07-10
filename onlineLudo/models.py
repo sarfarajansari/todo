@@ -160,6 +160,8 @@ class OnlinePlayer(models.Model):
     game = models.ForeignKey(OnlineGame,on_delete=models.CASCADE,related_name="players")
     active = models.BooleanField(default=False)
     host = models.BooleanField(default=False)
+    updateGame = models.BooleanField(default=False)
+    updateMessage = models.BooleanField(default=False)
     
 
 

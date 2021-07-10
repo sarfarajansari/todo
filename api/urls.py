@@ -26,5 +26,5 @@ urlpatterns = [
     path("portfolio/",include("home.urls")),
     path("todo/",include("todo.urls")),
     path("ludo/",include("ludo.urls")),
-    path("online/ludo/",include("onlineLudo.urls")),
+    path("onlineludo/",include("onlineLudo.urls")),
 ]
