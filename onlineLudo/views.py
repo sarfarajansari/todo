@@ -98,8 +98,6 @@ def Disconnect(request,gtoken,ptoken):
 
     return Response({})
     
-    
-
 
 @api_view(["GET"])
 def updateMessage(request,gtoken,ptoken):

@@ -35,8 +35,6 @@ class LudoConsumer(WebsocketConsumer):
             self.game = False
             pass
         
-
-
     def disconnect(self,closecode):
         if self.player and self.game:
             self.player.active = False
