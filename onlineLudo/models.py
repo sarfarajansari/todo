@@ -8,6 +8,12 @@ from ludo.path import Paths,safe
 
 
 # Create your models here.
+class OldCoordinate(models.Model):
+    x= models.IntegerField()
+    y= models.IntegerField()
+
+    def __str__(self):
+        return f"({self.x},{self.y})"
 
 class OnlineGame(models.Model):
     winnerId = models.IntegerField(null=True,blank=True)
@@ -19,6 +25,8 @@ class OnlineGame(models.Model):
     turn = models.IntegerField(default=0)
     dateTime = models.DateTimeField(auto_now_add=True)
     lastTurn = models.IntegerField(default=-1)
+    dice= models.IntegerField(default=0)
+    old= models.OneToOneField(OldCoordinate,on_delete=models.CASCADE)
 
     def check_attack(self,c):
         for player in self.players.all():
@@ -29,7 +37,7 @@ class OnlineGame(models.Model):
 
     @property
     def n(self):
-        return len(list(self.players.all()))
+        return len(list(self.players.filter(active=True)))
     @property
     def get_winner(self):
         if self.winner:
@@ -151,6 +159,13 @@ class OnlineGame(models.Model):
         self.save()
 
 
+class Step(models.Model):
+    x= models.IntegerField()
+    y= models.IntegerField()
+    game=models.ForeignKey(OnlineGame,on_delete=models.CASCADE,related_name="steps")
+
+
+
 class OnlinePlayer(models.Model):
     name = models.CharField(max_length=50,default="")
     turn=models.BooleanField(default=False)
@@ -162,6 +177,7 @@ class OnlinePlayer(models.Model):
     host = models.BooleanField(default=False)
     updateGame = models.BooleanField(default=False)
     updateMessage = models.BooleanField(default=False)
+    refresh = models.BooleanField(default=False)
     
 
 
@@ -172,7 +188,7 @@ class OnlinePlayer(models.Model):
         self.game = game
         self.save()
         for i in range(4):
-            c = Coord(number=1,player=self)
+            c = Coord(number=i,player=self)
             c.initialize()
             c.save()
 
