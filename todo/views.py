@@ -3,7 +3,13 @@ from rest_framework.response import Response
 from datetime import datetime,timedelta
 from .models import TaskUser,Task
 from .serializer import TaskSerializer
-from store.views import get_random_string
+import string,random
+
+
+def get_random_string(length):
+    letters = string.ascii_lowercase
+    result_str = ''.join(random.choice(letters) for i in range(length))
+    return result_str
 
 
 @api_view(["GET"])
