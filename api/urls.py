@@ -20,11 +20,5 @@ from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path("auth/",include("authApi.urls")),
-    path("store/",include("store.urls")),
-    path("schedule/",include("claySchedule.urls")),
-    path("portfolio/",include("home.urls")),
     path("todo/",include("todo.urls")),
-    path("ludo/",include("ludo.urls")),
-    path("onlineludo/",include("onlineLudo.urls")),
 ]

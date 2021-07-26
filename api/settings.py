@@ -45,13 +45,9 @@ INSTALLED_APPS = [
     'cloudinary',
     'cloudinary_storage',
 
-    'authApi',
-    'store',
-    "claySchedule",
-    'home',
+
     'todo',
-    'ludo',
-    'onlineLudo',
+
 ]
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
