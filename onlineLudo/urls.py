@@ -11,4 +11,5 @@ urlpatterns = [
     path("update/message/<str:gtoken>/<str:ptoken>/",views.updateMessage,name="message"),
     path("update/game/<str:gtoken>/<str:ptoken>/",views.updateGame,name="message"),
     path("play/<str:gtoken>/<str:ptoken>/",views.play,name="play"),
+    path("availableplayers/<str:gtoken>/",views.avalaiblePlayers,name="availableplayers")
 ]

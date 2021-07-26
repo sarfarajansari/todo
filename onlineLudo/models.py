@@ -6,14 +6,10 @@ from django.db import models
 from ludo.intial import initial_position,colors
 from ludo.path import Paths,safe
 
-
+class LastPlayed(models.Model):
+    colorId = models.IntegerField(default=0)
+    number = models.IntegerField(default=0)
 # Create your models here.
-class OldCoordinate(models.Model):
-    x= models.IntegerField()
-    y= models.IntegerField()
-
-    def __str__(self):
-        return f"({self.x},{self.y})"
 
 class OnlineGame(models.Model):
     winnerId = models.IntegerField(null=True,blank=True)
@@ -26,7 +22,7 @@ class OnlineGame(models.Model):
     dateTime = models.DateTimeField(auto_now_add=True)
     lastTurn = models.IntegerField(default=-1)
     dice= models.IntegerField(default=0)
-    old= models.OneToOneField(OldCoordinate,on_delete=models.CASCADE)
+    lastplayed =models.OneToOneField(LastPlayed,on_delete=models.CASCADE,null=True)
 
     def check_attack(self,c):
         for player in self.players.all():
@@ -159,10 +155,6 @@ class OnlineGame(models.Model):
         self.save()
 
 
-class Step(models.Model):
-    x= models.IntegerField()
-    y= models.IntegerField()
-    game=models.ForeignKey(OnlineGame,on_delete=models.CASCADE,related_name="steps")
 
 
 

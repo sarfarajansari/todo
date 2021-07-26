@@ -119,7 +119,6 @@ def getMessage(request,token):
 @api_view(["POST"])
 def sendMessage(request):
     data = request.data
-    print(data)
     if "message" in data and "token" in data:
         try:
             game = GameToken.objects.get(key=data["token"]).game

@@ -2,7 +2,7 @@ from django.shortcuts import render
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from store.views import get_random_string
-from .models import OnlineGameToken, OnlinePlayer, OnlineGame, Message,Step
+from .models import OnlineGameToken, OnlinePlayer, OnlineGame, Message,LastPlayed
 from . serializers import MessageSerializer, GameSerializer
 
 
@@ -10,8 +10,9 @@ from . serializers import MessageSerializer, GameSerializer
 @api_view(["POST"])
 def create(request):
     data = request.data
-    game = OnlineGame()
     if "colorId" in data:
+        lastplayed = LastPlayed.objects.create()
+        game = OnlineGame(lastplayed=lastplayed)
         colorId = data["colorId"]
         name = ""
         if "name" in data:
@@ -27,8 +28,22 @@ def create(request):
             })
     return Response({"status": 1, "message": "initial color"})
 
-# requirements : colorId ,gameToken,name
+@api_view(["POST"])
+def avalaiblePlayers(request,gtoken):
+    try:
+        game = OnlineGameToken.objects.get(key=gtoken).game
+    except:
+        return Response({"status": 1, "message": "Game unavailable"})
+    players =[]
+    for p in game.players.all():
+        players.append(p.colorId)
+    return Response({
+        "status":0,
+        "players":players,
+    })
 
+
+# requirements : colorId ,gameToken,name
 
 @api_view(["POST"])
 def join(request):
@@ -49,7 +64,7 @@ def join(request):
         if "name" in data:
             name = data["name"]
         player.initialize(game, name=name)
-        return Response({"status": 0, "token": player.token})
+        return Response({"status": 0, "player": player.token,"game":data["token"]})
     return Response({"status": -1, "message": "invalid data"})
 
 
@@ -132,18 +147,26 @@ def updateGame(request, gtoken, ptoken):
         player = OnlinePlayer.objects.get(token=ptoken)
     except:
         return Response({"status": -1, "message": "invalid game"})
-    if player.updateGame or player.refresh:
-        needplay = player.updateGame
-        if player.refresh:
-            player.refresh = False
-        if player.updateGame:
-            player.updateGame = False
+    if player.updateGame:
+        player.refresh = False
+        player.updateGame = False
         player.save()
 
         data = {
             "game": GameSerializer(game).data,
             "status": 0,
-            "play":needplay
+            "play":True
+        }
+        return Response(data)
+    
+    if player.refresh:
+        player.refresh = False
+        player.save()
+
+        data = {
+            "game": GameSerializer(game).data,
+            "status": 0,
+            "play":False
         }
         return Response(data)
     return Response({
@@ -184,30 +207,15 @@ def play(request, gtoken, ptoken):
     game.turn = data["turn"]
     game.winnerId = data["winnerId"]
     game.winner = data["winner"]
-    game.lastTurn = thisplayer.colorId
+    game.lastplayed.number = data["lastplayed"]["number"]
+    game.lastplayed.colorId = thisplayer.colorId
+    game.lastplayed.save()
     game.dice = data["dice"]
-    
-    game.old.y = data["old"][0]
-    game.old.x = data["old"][1]
-    game.old.save()
-
-    for step in game.steps.all():
-        step.delete()
-    
-    for step in data["steps"]:
-        Step.objects.create(y=step[0],x=step[1],game=game)
-
     game.save()
 
     for p in game.players.all():
         for player in data["players"]:
-            print(player)
             if p.colorId == player["colorId"]:
-                p.active = True
-                if p.id!=thisplayer.id:
-                    p.updateGame= True
-                p.save()
-
                 for c in p.coordinates.all():
                     for cdata in player["coordinates"]:
                         if c.number == cdata["number"]:
@@ -218,6 +226,10 @@ def play(request, gtoken, ptoken):
                             c.save()
                             break
                 break
+
+    for p in game.players.exclude(colorId=thisplayer.colorId):
+        p.updateGame= True
+        p.save()
     return Response({})
             
 
