@@ -1,7 +1,4 @@
 
-https://github.com/user-attachments/assets/ca8807e5-4568-474d-8544-0113742b0a6a
-
-
 # To-Do App 📝
 
 This is a simple **To-Do app** built in **React**—one of my very first React projects. Although the UI is basic, this project was a great learning experience and helped me get hands-on with React fundamentals.
